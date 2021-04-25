@@ -155,6 +155,14 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(spot_sm src/spot_sm.cpp)
 add_executable(teleop_node src/teleop_node.cpp)
+add_executable(spot_i2c 
+  src/spot_i2c.cpp
+  src/SpotServo/i2cpwm_pca9685.cpp
+  src/IMU/IMU.cpp
+  src/ContactSensor/ContactSensor.cpp
+  src/SpotServo/SpotServo.cpp
+  src/Utils/Utilities.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -162,11 +170,13 @@ add_executable(teleop_node src/teleop_node.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(spot_sm PROPERTIES OUTPUT_NAME spot_sm PREFIX "")
 set_target_properties(teleop_node PROPERTIES OUTPUT_NAME teleop_node PREFIX "")
+set_target_properties(spot_i2c PROPERTIES OUTPUT_NAME spot_i2c PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(spot_sm ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(teleop_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(spot_i2c i2c ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
 ## Specify libraries to link a library or executable target against
@@ -180,6 +190,14 @@ ${catkin_LIBRARIES}
 target_link_libraries(
 teleop_node
 # Eigen3::Eigen
+${PROJECT_NAME}
+${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+spot_i2c
+# Eigen3::Eigen
+i2c
 ${PROJECT_NAME}
 ${catkin_LIBRARIES}
 )
@@ -203,7 +221,7 @@ install(PROGRAMS
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-install(TARGETS spot_sm teleop_node
+install(TARGETS spot_sm teleop_node spot_i2c
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

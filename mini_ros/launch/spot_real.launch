@@ -3,6 +3,9 @@
   <node name="spot_sm" pkg="mini_ros" type="spot_sm" output="screen">
     <param name="frequency" value="200.0" type="double"/>
   </node>
+ <!-- I2C node for controlling all servos, IMU, contact sensors and etc.-->
+  <node name="spot_i2c" pkg="mini_ros" type="spot_i2c" output="screen">
+  </node>
 
  <!-- Joystick Node -->
   <node respawn="true" pkg="joy"
